@@ -11,8 +11,15 @@ export const AuthProvider = ({ children }) => {
   const [errorType, setErrorType] = useState(null); // 'NETWORK', 'NO_PROFILE', 'NO_MUNICIPALITY', 'FETCH_ERROR', 'INVALID_ROLE'
   const [errorMessage, setErrorMessage] = useState('');
   const [technicalDetails, setTechnicalDetails] = useState('');
+  const fetchInProgress = React.useRef(false);
 
   const fetchProfile = async (uid) => {
+    if (fetchInProgress.current) {
+        console.log('[AUTH_LOG] Fetch já em andamento, ignorando...');
+        return;
+    }
+    
+    fetchInProgress.current = true;
     console.log('[AUTH_LOG] 1. Início do profile fetch para UID:', uid);
     try {
       const { data, error } = await supabase
@@ -27,7 +34,9 @@ export const AuthProvider = ({ children }) => {
         console.error('[AUTH_LOG] ERR: Erro real retornado pelo Supabase:', error);
         
         if (error.message?.includes('Fetch is aborted') || error.message?.includes('AbortError')) {
-          console.warn('[AUTH_LOG] WARN: Fetch abortado (race condition).');
+          console.warn('[AUTH_LOG] WARN: Fetch abortado (race condition). Ignorando...');
+          // Don't set error type to allow retry
+          fetchInProgress.current = false;
           return;
         }
         
@@ -37,10 +46,11 @@ export const AuthProvider = ({ children }) => {
         } else {
           setErrorType('FETCH_ERROR');
           setErrorMessage('Erro ao buscar profile na base de dados.');
-          setTechnicalDetails(error.message);
+          setTechnicalDetails(error.message || JSON.stringify(error));
         }
         
         setProfile(null);
+        fetchInProgress.current = false;
         return;
       }
 
@@ -69,14 +79,16 @@ export const AuthProvider = ({ children }) => {
       if (data.municipality_id) {
          checkExpiredLicenses(data.municipality_id);
       }
+      fetchInProgress.current = false;
     } catch (err) {
       console.error('[AUTH_LOG] ERR: Excepção inesperada no catch:', err);
       if (err.message?.includes('Failed to fetch')) {
         setErrorType('NETWORK');
       } else {
         setErrorType('FETCH_ERROR');
-        setTechnicalDetails(err.message);
+        setTechnicalDetails(err.message || String(err));
       }
+      fetchInProgress.current = false;
     }
   };
 
