@@ -56,7 +56,7 @@ const Reports = () => {
             const { data: payData } = await supabase
                 .from('payments')
                 .select('value, created_at, payment_type')
-                .eq('status', 'Confirmado')
+                .eq('status', 'confirmed')
                 .eq('municipality_id', mid)
                 .gte('created_at', dateRange.start)
                 .lte('created_at', dateRange.end + 'T23:59:59');
@@ -99,9 +99,9 @@ const Reports = () => {
             setRevenueByPost(sources);
 
             const { count: motoCount } = await supabase.from('motorcycles').select('*', { count: 'exact', head: true }).eq('municipality_id', mid);
-            const { count: activeLic } = await supabase.from('licenses').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'Activa');
-            const { count: expiredLic } = await supabase.from('licenses').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'Expirada');
-            const { count: activeSeize } = await supabase.from('seizures').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'Activa');
+            const { count: activeLic } = await supabase.from('licenses').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'active');
+            const { count: expiredLic } = await supabase.from('licenses').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'expired');
+            const { count: activeSeize } = await supabase.from('seizures').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'active');
 
             setStats({
                 revenue: totalRevenue,
@@ -138,7 +138,7 @@ const Reports = () => {
                 ['Receita Bruta Total', `${stats.revenue.toLocaleString()} MT`, 'Conforme'],
                 ['Licenciamento', `${(stats.revenue - stats.fines_total).toLocaleString()} MT`, 'Normal'],
                 ['Multas Aplicadas', `${stats.fines_total.toLocaleString()} MT`, 'Monitorado'],
-                ['Frota Registada', stats.motorcycles_count.toString(), 'Activa'],
+                ['Frota Registada', stats.motorcycles_count.toString(), 'active'],
                 ['Conformidade Fiscal', `${((stats.active_licenses / (stats.motorcycles_count || 1)) * 100).toFixed(1)}%`, 'Auditado']
             ],
             theme: 'grid',

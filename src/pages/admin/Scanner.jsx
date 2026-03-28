@@ -69,7 +69,7 @@ const Scanner = () => {
     }
 
     const isRegular = scanResult?.operational_status === 'Regular' && 
-                      scanResult?.licenses?.some(l => l.status === 'Activa');
+                      scanResult?.licenses?.some(l => l.status === 'active');
 
     return (
         <motion.div 
@@ -230,8 +230,8 @@ const Scanner = () => {
                                 <DossierRow 
                                     icon={<Shield size={18} />} 
                                     label="LICENCIAMENTO" 
-                                    value={scanResult.licenses?.[0]?.status === 'Activa' ? 'VIGENTE' : 'CADUCADO'} 
-                                    color={scanResult.licenses?.[0]?.status === 'Activa' ? '#10b981' : '#ef4444'}
+                                    value={scanResult.licenses?.[0]?.status === 'active' ? 'VIGENTE' : 'CADUCADO'} 
+                                    color={scanResult.licenses?.[0]?.status === 'active' ? '#10b981' : '#ef4444'}
                                 />
                             </div>
 

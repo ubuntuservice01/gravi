@@ -32,8 +32,8 @@ const MotorcycleForm = () => {
         year: new Date().getFullYear(),
         cc: '',
         purpose: 'Particular',
-        status: 'Activa',
-        operational_situation: 'Pendente',
+        status: 'active',
+        operational_situation: 'pending',
         observations: '',
         taxi_driver_name: '',
         taxi_vest_number: '',
@@ -386,17 +386,17 @@ const MotorcycleForm = () => {
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
                                 <FormField label="Status Sistémico do Veículo">
                                     <select className="tac-input-ultra" value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}>
-                                        <option value="Activa">Activa / Operacional</option>
-                                        <option value="Inactiva">Inactiva (Fora de Uso)</option>
-                                        <option value="Suspensa">Suspensa / Apreendida</option>
-                                        <option value="Bloqueada">Bloqueada (Criminal / Administrativo)</option>
+                                        <option value="active">Activa / Operacional</option>
+                                        <option value="inactive">Inactiva (Fora de Uso)</option>
+                                        <option value="suspended">Suspensa / Apreendida</option>
+                                        <option value="blocked">Bloqueada (Criminal / Administrativo)</option>
                                     </select>
                                 </FormField>
                                 <FormField label="Validação de Conformidade">
                                     <select className="tac-input-ultra" value={formData.operational_situation} onChange={e => setFormData({ ...formData, operational_situation: e.target.value })}>
-                                        <option value="Regular">Aprovado em Vistoria</option>
-                                        <option value="Irregular">Não Conforme / Rejeitado</option>
-                                        <option value="Pendente">Em Análise Técnica</option>
+                                        <option value="regular">Aprovado em Vistoria</option>
+                                        <option value="irregular">Não Conforme / Rejeitado</option>
+                                        <option value="pending">Em Análise Técnica</option>
                                     </select>
                                 </FormField>
                             </div>

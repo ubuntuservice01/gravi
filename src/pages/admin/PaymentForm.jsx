@@ -61,7 +61,7 @@ const PaymentForm = () => {
                 .from('fines')
                 .select('*')
                 .eq('vehicle_id', data.id)
-                .eq('status', 'Pendente');
+                .eq('status', 'pending');
             
             setPendingFines(fines || []);
         } catch (err) {
@@ -103,7 +103,7 @@ const PaymentForm = () => {
                 value: parseFloat(formData.value),
                 municipality_id: profile.municipality_id,
                 collector_id: profile.id,
-                status: 'Confirmado'
+                status: 'confirmed'
             }]);
 
             if (error) throw error;
@@ -112,7 +112,7 @@ const PaymentForm = () => {
             if (formData.fine_id) {
                 await supabase
                     .from('fines')
-                    .update({ status: 'Pago' })
+                    .update({ status: 'paid' })
                     .eq('id', formData.fine_id);
             }
 

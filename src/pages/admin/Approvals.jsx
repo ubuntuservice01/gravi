@@ -72,7 +72,7 @@ const Approvals = () => {
             const { error: updateError } = await supabase
                 .from('edit_requests')
                 .update({
-                    status: approved ? 'Aprovado' : 'Rejeitado',
+                    status: approved ? 'approved' : 'rejected',
                     approver_id: profile?.id,
                     approver_name: profile?.full_name,
                     rejection_reason: rejectionReason,
@@ -149,7 +149,7 @@ const Approvals = () => {
             <div className="tactical-status-bar security">
                 <StatusItem icon={<Shield size={18} />} label="VETOR DE AUDITORIA" value="ACTIVO" color="#3b82f6" />
                 <div className="v-divider"></div>
-                <StatusItem icon={<Clock size={18} />} label="EM REVISÃO" value={requests.filter(r => r.status === 'Pendente').length} color="#f59e0b" />
+                <StatusItem icon={<Clock size={18} />} label="EM REVISÃO" value={requests.filter(r => r.status === 'pending').length} color="#f59e0b" />
                 <div className="v-divider"></div>
                 <StatusItem icon={<Database size={18} />} label="SINCRO" value="OTIMIZADA" color="#10b981" />
                 <div className="b-search-placeholder">
@@ -158,10 +158,10 @@ const Approvals = () => {
             </div>
 
             <div className="kpi-row">
-                <KPICard icon={<Clock size={26} />} label="FILA CRÍTICA" value={requests.filter(r => r.status === 'Pendente').length} color="#f59e0b" subText="Requerendo Validação" />
+                <KPICard icon={<Clock size={26} />} label="FILA CRÍTICA" value={requests.filter(r => r.status === 'pending').length} color="#f59e0b" subText="Requerendo Validação" />
                 <KPICard icon={<ShieldCheck size={26} />} label="VALOR AUDITADO" value={requests.length} color="#3b82f6" subText="Histórico de Revisões" />
-                <KPICard icon={<CheckCircle size={26} />} label="APROVADOS" value={requests.filter(r => r.status === 'Aprovado').length} color="#10b981" subText="Modificações Efectivadas" />
-                <KPICard icon={<AlertTriangle size={26} />} label="BLOQUEADOS" value={requests.filter(r => r.status === 'Rejeitado').length} color="#ef4444" subText="Tentativas Descartadas" />
+                <KPICard icon={<CheckCircle size={26} />} label="APROVADOS" value={requests.filter(r => r.status === 'approved').length} color="#10b981" subText="Modificações Efectivadas" />
+                <KPICard icon={<AlertTriangle size={26} />} label="BLOQUEADOS" value={requests.filter(r => r.status === 'rejected').length} color="#ef4444" subText="Tentativas Descartadas" />
             </div>
 
             <div className="inventory-card">
@@ -217,7 +217,7 @@ const Approvals = () => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <div className={`status-pill-tactical ${req.status === 'Aprovado' ? 'success' : req.status === 'Rejeitado' ? 'danger' : 'warning'}`}>
+                                                <div className={`status-pill-tactical ${req.status === 'approved' ? 'success' : req.status === 'rejected' ? 'danger' : 'warning'}`}>
                                                     <div className="s-dot"></div>
                                                     {req.status.toUpperCase()}
                                                 </div>
@@ -300,15 +300,15 @@ const Approvals = () => {
                             </div>
 
                             <div className="modal-actions full">
-                                {selectedRequest.status === 'Pendente' ? (
+                                {selectedRequest.status === 'pending' ? (
                                     <>
                                         <button onClick={() => handleApproval(selectedRequest, false)} className="m-btn secondary danger">REJEITAR SOLICITAÇÃO</button>
                                         <button onClick={() => handleApproval(selectedRequest, true)} className="m-btn primary">EFECTIVAR ALTERAÇÕES</button>
                                     </>
                                 ) : (
-                                    <div className={`audit-resolution ${selectedRequest.status === 'Aprovado' ? 'success' : 'danger'}`}>
+                                    <div className={`audit-resolution ${selectedRequest.status === 'approved' ? 'success' : 'danger'}`}>
                                         <div className="res-icon">
-                                            {selectedRequest.status === 'Aprovado' ? <CheckCircle2 size={24} /> : <AlertTriangle size={24} />}
+                                            {selectedRequest.status === 'approved' ? <CheckCircle2 size={24} /> : <AlertTriangle size={24} />}
                                         </div>
                                         <div className="res-info">
                                             <div className="res-title">PROTOCOLADO COMO: {selectedRequest.status.toUpperCase()}</div>

@@ -86,7 +86,7 @@ const SeizureForm = () => {
                 daily_fee: parseFloat(formData.daily_fee),
                 municipality_id: profile.municipality_id,
                 fiscal_id: profile.id,
-                status: 'Activa'
+                status: 'active'
             }]);
 
             if (error) throw error;

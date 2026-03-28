@@ -10,7 +10,7 @@ const OwnerSearch = ({ onSelect, initialOwner }) => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [newOwner, setNewOwner] = useState({ full_name: '', identity_document: '', nuit: '', phone: '' });
+  const [newOwner, setNewOwner] = useState({ full_name: '', bi_number: '', nuit: '', phone: '' });
   const [selectedOwner, setSelectedOwner] = useState(initialOwner || null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const OwnerSearch = ({ onSelect, initialOwner }) => {
       const { data, error } = await supabase
         .from('owners')
         .select('*')
-        .or(`full_name.ilike.%${searchTerm}%,nuit.ilike.%${searchTerm}%,identity_document.ilike.%${searchTerm}%`)
+        .or(`full_name.ilike.%${searchTerm}%,nuit.ilike.%${searchTerm}%,bi_number.ilike.%${searchTerm}%`)
         .eq('municipality_id', profile.municipality_id)
         .limit(5);
 
@@ -104,7 +104,7 @@ const OwnerSearch = ({ onSelect, initialOwner }) => {
             <div style={{ fontSize: '1.25rem', fontWeight: '950', color: 'white', letterSpacing: '-0.5px' }}>{selectedOwner.full_name}</div>
             <div style={{ display: 'flex', gap: '15px', marginTop: '6px' }}>
               <div style={{ fontSize: '0.7rem', fontWeight: '950', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>NUIT: {selectedOwner.nuit || '---'}</div>
-              <div style={{ fontSize: '0.7rem', fontWeight: '950', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>ID: {selectedOwner.identity_document || '---'}</div>
+              <div style={{ fontSize: '0.7rem', fontWeight: '950', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>ID: {selectedOwner.bi_number || '---'}</div>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ const OwnerSearch = ({ onSelect, initialOwner }) => {
                         </div>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontWeight: '950', fontSize: '0.95rem', color: '#0f172a' }}>{owner.full_name}</div>
-                          <div style={{ fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginTop: '2px' }}>NUIT: {owner.nuit} • ID: {owner.identity_document}</div>
+                          <div style={{ fontSize: '0.7rem', fontWeight: '800', color: '#94a3b8', textTransform: 'uppercase', marginTop: '2px' }}>NUIT: {owner.nuit} • ID: {owner.bi_number}</div>
                         </div>
                         <ChevronRight size={18} color="#cbd5e1" />
                       </button>
@@ -226,8 +226,8 @@ const OwnerSearch = ({ onSelect, initialOwner }) => {
                 <input 
                   type="text" 
                   className="tac-input-ultra white"
-                  value={newOwner.identity_document}
-                  onChange={e => setNewOwner({...newOwner, identity_document: e.target.value})}
+                  value={newOwner.bi_number}
+                  onChange={e => setNewOwner({...newOwner, bi_number: e.target.value})}
                   required
                 />
               </div>

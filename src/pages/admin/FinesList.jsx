@@ -74,8 +74,8 @@ const FinesList = () => {
 
     const calculateStats = (data) => {
         const total = data.length;
-        const pending = data.filter(f => f.status === 'Pendente').length;
-        const paid = data.filter(f => f.status === 'Paga').length;
+        const pending = data.filter(f => f.status === 'pending').length;
+        const paid = data.filter(f => f.status === 'paid').length;
         const totalValue = data.reduce((acc, current) => acc + Number(current.value), 0);
         setStats({ total, pending, paid, totalValue });
     };
@@ -123,7 +123,7 @@ const FinesList = () => {
                 location: formData.location,
                 fiscal_id: profile.id,
                 municipality_id: profile.municipality_id,
-                status: 'Pendente'
+                status: 'pending'
             };
 
             const { data, error } = await supabase
@@ -156,13 +156,13 @@ const FinesList = () => {
         try {
             const { error } = await supabase
                 .from('fines')
-                .update({ status: 'Paga' })
+                .update({ status: 'paid' })
                 .eq('id', fine.id);
 
             if (error) throw error;
 
             // Log de Auditoria
-            await logAudit(profile.id, profile.full_name, 'UPDATE', 'fines', fine.id, { status: 'Paga' }, fine);
+            await logAudit(profile.id, profile.full_name, 'UPDATE', 'fines', fine.id, { status: 'paid' }, fine);
 
             // Create payment record automatically
             await supabase.from('payments').insert([{
@@ -175,7 +175,7 @@ const FinesList = () => {
                 method: 'Numerário',
                 municipality_id: profile.municipality_id,
                 collector_id: profile.id,
-                status: 'Confirmado'
+                status: 'confirmed'
             }]);
 
             fetchFines();
@@ -309,14 +309,14 @@ const FinesList = () => {
                                                 <div className="val-cell">{Number(f.value).toLocaleString()} MT</div>
                                             </td>
                                             <td>
-                                                <div className={`status-pill-tactical ${f.status === 'Paga' ? 'success' : 'warning'}`}>
+                                                <div className={`status-pill-tactical ${f.status === 'paid' ? 'success' : 'warning'}`}>
                                                     <div className="s-dot"></div>
                                                     {f.status.toUpperCase()}
                                                 </div>
                                             </td>
                                             <td className="text-right">
                                                 <div className="action-cluster" onClick={e => e.stopPropagation()}>
-                                                    {f.status === 'Pendente' && (
+                                                    {f.status === 'pending' && (
                                                         <button onClick={() => markAsPaid(f)} className="tac-btn-sm highlight" title="Liquidar"><DollarSign size={18} /></button>
                                                     )}
                                                     <button onClick={() => navigate(`/admin/motorcycles/${f.vehicle_id}`)} className="tac-btn-sm"><ChevronRight size={20} /></button>

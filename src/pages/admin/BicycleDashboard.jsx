@@ -48,7 +48,7 @@ const BicycleDashboard = () => {
                 .eq('vehicles.type', 'Bicicleta')
                 .eq('vehicles.municipality_id', profile.municipality_id);
 
-            const active = licenses?.filter(l => l.status === 'Activa').length || 0;
+            const active = licenses?.filter(l => l.status === 'active').length || 0;
             const revenue = licenses?.reduce((acc, l) => acc + Number(l.value || 0), 0) || 0;
 
             setStats({

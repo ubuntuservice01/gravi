@@ -46,13 +46,13 @@ const CarsList = () => {
 
     const getStatusStyle = (status) => {
         const styles = {
-            'Activa': { bg: '#ecfdf5', color: '#10b981', icon: <CheckCircle size={14} /> },
-            'Inactiva': { bg: '#fef2f2', color: '#ef4444', icon: <X size={14} /> },
-            'Suspensa': { bg: '#fffbeb', color: '#f59e0b', icon: <AlertTriangle size={14} /> },
-            'Bloqueada': { bg: '#1e293b', color: 'white', icon: <X size={14} /> },
-            'Pendente': { bg: '#f1f5f9', color: '#64748b', icon: <div className="animate-spin h-3 w-3 border-2 border-slate-300 border-t-slate-600 rounded-full" /> }
+            'active': { bg: '#ecfdf5', color: '#10b981', icon: <CheckCircle size={14} /> },
+            'inactive': { bg: '#fef2f2', color: '#ef4444', icon: <X size={14} /> },
+            'suspended': { bg: '#fffbeb', color: '#f59e0b', icon: <AlertTriangle size={14} /> },
+            'blocked': { bg: '#1e293b', color: 'white', icon: <X size={14} /> },
+            'pending': { bg: '#f1f5f9', color: '#64748b', icon: <div className="animate-spin h-3 w-3 border-2 border-slate-300 border-t-slate-600 rounded-full" /> }
         };
-        return styles[status] || styles['Pendente'];
+        return styles[status] || styles['pending'];
     };
 
     const filteredCars = cars.filter(c =>

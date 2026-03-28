@@ -94,11 +94,11 @@ const MotorcyclesList = () => {
 
             {/* Tactical Intelligence Bar */}
             <div className="tactical-status-bar">
-                <StatusItem icon={<Activity size={18} />} label="FROTA ACTIVA" value={motorcycles.filter(m => m.status === 'Activa').length} color="#10b981" />
+                <StatusItem icon={<Activity size={18} />} label="FROTA ACTIVA" value={motorcycles.filter(m => m.status === 'active').length} color="#10b981" />
                 <div className="v-divider"></div>
-                <StatusItem icon={<Shield size={18} />} label="BLOQUEADOS" value={motorcycles.filter(m => m.status === 'Bloqueada' || m.status === 'Suspensa' || m.status === 'Apreendida').length} color="#ef4444" />
+                <StatusItem icon={<Shield size={18} />} label="BLOQUEADOS" value={motorcycles.filter(m => m.status === 'blocked' || m.status === 'suspended' || m.status === 'seized').length} color="#ef4444" />
                 <div className="v-divider"></div>
-                <StatusItem icon={<Zap size={18} />} label="CAPACIDADE" value={`${((motorcycles.filter(m => m.status === 'Activa').length / (motorcycles.length || 1)) * 100).toFixed(0)}%`} color="#3b82f6" />
+                <StatusItem icon={<Zap size={18} />} label="CAPACIDADE" value={`${((motorcycles.filter(m => m.status === 'active').length / (motorcycles.length || 1)) * 100).toFixed(0)}%`} color="#3b82f6" />
                 <div className="b-search">
                     <Search size={18} />
                     <input 
@@ -112,8 +112,8 @@ const MotorcyclesList = () => {
 
             <div className="kpi-row">
                 <KPICard icon={<Bike size={26} />} label="TOTAL REGISTADO" value={motorcycles.length} color="#3b82f6" subText="Unidades Mapeadas" />
-                <KPICard icon={<ShieldCheck size={26} />} label="EM CONFORMIDADE" value={motorcycles.filter(m => m.status === 'Activa').length} color="#10b981" subText="Prontos para circulação" />
-                <KPICard icon={<AlertTriangle size={26} />} label="IRREGULARES" value={motorcycles.filter(m => m.status !== 'Activa').length} color="#f59e0b" subText="Pendente Acção" />
+                <KPICard icon={<ShieldCheck size={26} />} label="EM CONFORMIDADE" value={motorcycles.filter(m => m.status === 'active').length} color="#10b981" subText="Prontos para circulação" />
+                <KPICard icon={<AlertTriangle size={26} />} label="IRREGULARES" value={motorcycles.filter(m => m.status !== 'active').length} color="#f59e0b" subText="Pendente Acção" />
                 <KPICard icon={<History size={26} />} label="ÚLTIMA ACTUALIZAÇÃO" value="Hoje" color="#0f172a" subText={new Date().toLocaleTimeString()} />
             </div>
 
@@ -175,9 +175,9 @@ const MotorcyclesList = () => {
                                                 {m.purpose === 'Moto-Táxi' && <div className="taxi-vest">COLETE: #{m.taxi_vest_number || '---'}</div>}
                                             </td>
                                             <td>
-                                                <div className={`status-pill-tactical ${m.status.toLowerCase()}`}>
+                                                <div className={`status-pill-tactical ${m.status?.toLowerCase()}`}>
                                                     <div className="s-dot"></div>
-                                                    {m.status.toUpperCase()}
+                                                    {m.status?.toUpperCase()}
                                                 </div>
                                             </td>
                                             <td className="text-right">
@@ -204,7 +204,7 @@ const MotorcyclesList = () => {
                                     className="tac-grid-card"
                                     onClick={() => navigate(`/admin/motorcycles/${m.id}`)}
                                 >
-                                    <div className="g-status"><div className={`p-dot ${m.status.toLowerCase()}`}></div> {m.status.toUpperCase()}</div>
+                                    <div className="g-status"><div className={`p-dot ${m.status?.toLowerCase()}`}></div> {m.status?.toUpperCase()}</div>
                                     <div className="g-plate-section">
                                         <div className="plate-sm">
                                             <span className="l">MZ</span>
@@ -279,8 +279,8 @@ const MotorcyclesList = () => {
 
                 .status-pill-tactical { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 100px; font-size: 0.75rem; font-weight: 950; letter-spacing: 0.5px; }
                 .status-pill-tactical .s-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-                .status-pill-tactical.activa { background: #ecfdf5; color: #10b981; }
-                .status-pill-tactical.bloqueada, .status-pill-tactical.suspensa, .status-pill-tactical.apreendida { background: #fff1f2; color: #ef4444; }
+                .status-pill-tactical.active { background: #ecfdf5; color: #10b981; }
+                .status-pill-tactical.blocked, .status-pill-tactical.suspended, .status-pill-tactical.seized { background: #fff1f2; color: #ef4444; }
 
                 .action-cluster { display: flex; justify-content: flex-end; gap: 8px; }
                 .tac-btn-sm { width: 44px; height: 44px; border-radius: 14px; border: 1.5px solid #f1f5f9; background: white; color: #64748b; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
@@ -293,7 +293,7 @@ const MotorcyclesList = () => {
                 .tac-grid-card:hover .arrow { transform: translateX(5px); color: #0f172a; }
                 .g-status { position: absolute; top: 1.5rem; right: 2.5rem; display: flex; align-items: center; gap: 8px; font-size: 0.65rem; font-weight: 950; color: #94a3b8; }
                 .p-dot { width: 6px; height: 6px; border-radius: 50%; }
-                .p-dot.activa { background: #10b981; }
+                .p-dot.active { background: #10b981; }
                 .g-plate-section { margin: 1rem 0 2.5rem 0; }
                 .plate-sm { display: inline-flex; background: #0f172a; color: white; border-radius: 8px; overflow: hidden; font-family: 'Monaco', monospace; margin-bottom: 1.5rem; border: 2px solid #334155; }
                 .plate-sm .l { background: #ef4444; padding: 2px 8px; font-size: 0.7rem; font-weight: 950; }

@@ -58,7 +58,7 @@ const LicenseRenewal = () => {
                 .update({
                     expiry_date: newExpiryDate,
                     value: fee,
-                    status: 'Activa',
+                    status: 'active',
                     updated_at: new Date().toISOString()
                 })
                 .eq('id', id);

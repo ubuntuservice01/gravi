@@ -70,9 +70,9 @@ const MotorcycleDetails = () => {
 
     if (!motorcycle) return <div className="p-12 text-center text-red-500 font-black">ALERTA: VEÍCULO INEXISTENTE NO REPOSITÓRIO.</div>;
 
-    const activeLicense = licenses.find(l => l.status === 'Activa');
+    const activeLicense = licenses.find(l => l.status === 'active');
     const isExpired = activeLicense && new Date(activeLicense.expiry_date) < new Date();
-    const unpaidFines = fines.filter(f => f.status === 'Pendente').length;
+    const unpaidFines = fines.filter(f => f.status === 'pending').length;
 
     return (
         <motion.div 
@@ -186,7 +186,7 @@ const MotorcycleDetails = () => {
                                             {motorcycle.purpose === 'Moto-Táxi' && (
                                                 <div className="tactical-sub-card">
                                                     <div className="s-label">IDENTIFICADOR DE COLETE</div>
-                                                    <div className="s-val">{motorcycle.vest_number}</div>
+                                                    <div className="s-val">{motorcycle.taxi_vest_number}</div>
                                                 </div>
                                             )}
                                         </div>
@@ -315,7 +315,7 @@ const MotorcycleDetails = () => {
                             </div>
                             <div className="i-stat alert">
                                 <label>MULTAS ACTIVAS</label>
-                                <p>{fines.filter(f => f.status === 'Pendente').reduce((acc, f) => acc + Number(f.value), 0).toLocaleString()} MT</p>
+                                <p>{fines.filter(f => f.status === 'pending').reduce((acc, f) => acc + Number(f.value), 0).toLocaleString()} MT</p>
                             </div>
                             <div className="total-box">
                                 <label>ACUMULADO MUNICIPAL</label>
@@ -416,8 +416,8 @@ const MotorcycleDetails = () => {
                 .empty-row { padding: 40px; text-align: center; font-size: 0.75rem; font-weight: 950; color: #cbd5e1; letter-spacing: 2px; }
 
                 .pill-status { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 950; text-transform: uppercase; }
-                .pill-status.activa, .pill-status.pago { background: #f0fdf4; color: #10b981; }
-                .pill-status.expirada, .pill-status.pendente { background: #fff1f2; color: #ef4444; }
+                .pill-status.active, .pill-status.paid { background: #f0fdf4; color: #10b981; }
+                .pill-status.expired, .pill-status.pending, .pill-status.cancelled { background: #fff1f2; color: #ef4444; }
 
                 .intel-summary { padding: 2.5rem; border: none; background: white; box-shadow: 0 15px 35px -5px rgba(0,0,0,0.03); border-radius: 40px; }
                 .intel-summary h3 { font-size: 0.8rem; font-weight: 950; color: #0f172a; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px; }

@@ -77,7 +77,7 @@ const PaymentsList = () => {
     });
 
     const totalRevenue = filteredPayments
-        .filter(p => p.status === 'Confirmado')
+        .filter(p => p.status === 'confirmed')
         .reduce((acc, curr) => acc + Number(curr.value), 0);
 
     const containerVariants = {
@@ -132,7 +132,7 @@ const PaymentsList = () => {
             <div className="tactical-status-bar finance">
                 <StatusItem icon={<TrendingUp size={18} />} label="ARRECADAÇÃO ACTIVADA" value={`${totalRevenue.toLocaleString()} MT`} color="#10b981" />
                 <div className="v-divider"></div>
-                <StatusItem icon={<Clock size={18} />} label="PENDENTE" value={`${filteredPayments.filter(p => p.status !== 'Confirmado').reduce((a,c) => a+Number(c.value),0).toLocaleString()} MT`} color="#f59e0b" />
+                <StatusItem icon={<Clock size={18} />} label="PENDENTE" value={`${filteredPayments.filter(p => p.status !== 'confirmed').reduce((a,c) => a+Number(c.value),0).toLocaleString()} MT`} color="#f59e0b" />
                 <div className="v-divider"></div>
                 <StatusItem icon={<Activity size={18} />} label="FLUXO DE CAIXA" value="SINCRONIZADO" color="#3b82f6" />
                 <div className="b-search">
@@ -201,7 +201,7 @@ const PaymentsList = () => {
                                 </thead>
                                 <motion.tbody variants={containerVariants} initial="hidden" animate="show">
                                     {filteredPayments.map((p) => {
-                                        const isConfirmed = p.status === 'Confirmado';
+                                        const isConfirmed = p.status === 'confirmed';
                                         return (
                                             <motion.tr key={p.id} variants={itemVariants} className="tac-row">
                                                 <td>

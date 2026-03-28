@@ -43,9 +43,9 @@ const MunicipalDashboard = () => {
 
             const [vehiclesRes, approvalsRes, paymentsRes, licensesRes, finesRes] = await Promise.all([
                 supabase.from('motorcycles').select('type').eq('municipality_id', mid),
-                supabase.from('approvals').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'Pendente'),
-                supabase.from('payments').select('value').eq('municipality_id', mid).eq('status', 'Confirmado'),
-                supabase.from('licenses').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'Activa'),
+                supabase.from('approvals').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'pending'),
+                supabase.from('payments').select('value').eq('municipality_id', mid).eq('status', 'confirmed'),
+                supabase.from('licenses').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).eq('status', 'active'),
                 supabase.from('fines').select('*', { count: 'exact', head: true }).eq('municipality_id', mid).gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
             ]);
 

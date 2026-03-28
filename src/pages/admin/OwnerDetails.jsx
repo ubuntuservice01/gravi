@@ -124,7 +124,7 @@ const OwnerDetails = () => {
 
                             <div className="id-contact-list">
                                 <div className="c-item"><Smartphone size={16} /> {owner.phone}</div>
-                                <div className="c-item"><Fingerprint size={16} /> {owner.identity_document}</div>
+                                <div className="c-item"><Fingerprint size={16} /> {owner.bi_number}</div>
                             </div>
                         </div>
                     </div>
@@ -169,7 +169,7 @@ const OwnerDetails = () => {
                                         <h4>INFORMAÇÃO CIVIL</h4>
                                         <div className="d-grid">
                                             <DetailItem label="Nome Completo" value={owner.full_name} bold />
-                                            <DetailItem label="Documento de Identidade" value={owner.identity_document} mono />
+                                            <DetailItem label="Documento de Identidade" value={owner.bi_number} mono />
                                             <DetailItem label="NUIT Fiscal" value={owner.nuit || 'PENDENTE'} />
                                             <DetailItem label="Data de Registo" value={new Date(owner.created_at).toLocaleDateString()} />
                                         </div>
@@ -200,7 +200,7 @@ const OwnerDetails = () => {
                                                 <div className="a-desc">{v.brand} {v.model} • {v.color}</div>
                                             </div>
                                             <div className="a-status">
-                                                <span className="pill-status activa">REGULAR</span>
+                                                 <span className={`pill-status ${v.status?.toLowerCase() === 'active' ? 'activa' : 'inactiva'}`}>REGULAR</span>
                                             </div>
                                             <div className="a-link"><ChevronRight size={20} /></div>
                                         </div>
@@ -289,9 +289,9 @@ const OwnerDetails = () => {
                 .a-desc { font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-top: 2px; }
                 .a-link { marginLeft: auto; color: #cbd5e1; }
                 .a-status .pill-status { padding: 5px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 950; }
-                .pill-status.activa { background: #f0fdf4; color: #10b981; }
+                .pill-status.active, .pill-status.paid { background: #f0fdf4; color: #10b981; }
+                .pill-status.expired, .pill-status.pending, .pill-status.cancelled { background: #fff1f2; color: #ef4444; }
 
-                .logs-list { display: flex; flex-direction: column; gap: 1.5rem; }
                 .log-entry { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 1.5rem; border-bottom: 1.5px solid #f8fafc; }
                 .log-time { font-size: 0.8rem; font-weight: 950; color: #cbd5e1; min-width: 100px; text-align: right; }
                 .log-info .l-title { font-size: 1rem; font-weight: 850; color: #0f172a; }

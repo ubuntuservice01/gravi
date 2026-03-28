@@ -124,7 +124,7 @@ const LicenseForm = () => {
           owner_id: selectedVehicle.owner_id,
           municipality_id: profile.municipality_id,
           issuer_id: profile.id,
-          status: 'Activa'
+          status: 'active'
         }]);
 
       if (error) throw error;

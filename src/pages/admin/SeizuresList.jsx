@@ -111,14 +111,14 @@ const SeizuresList = () => {
                 <KPICard 
                     icon={<Archive size={26} />} 
                     label="ACTIVOS RETIDOS" 
-                    value={seizures.filter(s => s.status === 'Activa').length} 
+                    value={seizures.filter(s => s.status === 'active').length} 
                     color="#ef4444" 
                     subText="Custódia em aberto"
                 />
                 <KPICard 
                     icon={<CheckCircle size={26} />} 
                     label="LIBERAÇÕES" 
-                    value={seizures.filter(s => s.status === 'Liberada').length} 
+                    value={seizures.filter(s => s.status === 'released').length} 
                     color="#10b981" 
                     subText="Concluídas no mês"
                 />
@@ -198,7 +198,7 @@ const SeizuresList = () => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <div className={`status-pill-tactical ${s.status === 'Activa' ? 'danger' : 'success'}`}>
+                                                <div className={`status-pill-tactical ${s.status === 'active' ? 'danger' : 'success'}`}>
                                                     <div className="s-dot"></div>
                                                     {s.status.toUpperCase()}
                                                 </div>
@@ -206,7 +206,7 @@ const SeizuresList = () => {
                                             <td className="text-right">
                                                 <div className="action-cluster">
                                                     <button onClick={() => navigate(`/admin/seizures/${s.id}`)} className="tac-btn-sm highlight" title="Dossier Completo"><Eye size={18} /></button>
-                                                    {s.status === 'Activa' && (
+                                                    {s.status === 'active' && (
                                                         <button className="tac-btn-sm success" title="Confirmar Liberação"><CheckCircle size={18} /></button>
                                                     )}
                                                     <button className="tac-btn-sm"><ChevronRight size={20} /></button>

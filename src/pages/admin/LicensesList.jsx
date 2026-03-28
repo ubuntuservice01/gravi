@@ -139,9 +139,9 @@ const LicensesList = () => {
 
             {/* Tactical Briefing Bar */}
             <div className="tactical-status-bar">
-                <StatusItem icon={<ShieldCheck size={18} />} label="CERTIFICADOS ACTIVOS" value={licenses.filter(l => l.status === 'Activa').length} color="#10b981" />
+                <StatusItem icon={<ShieldCheck size={18} />} label="CERTIFICADOS ACTIVOS" value={licenses.filter(l => l.status === 'active').length} color="#10b981" />
                 <div className="v-divider"></div>
-                <StatusItem icon={<AlertTriangle size={18} />} label="FORA DE PRAZO" value={licenses.filter(l => l.status === 'Expirada' || new Date(l.expiry_date) < new Date()).length} color="#ef4444" />
+                <StatusItem icon={<AlertTriangle size={18} />} label="FORA DE PRAZO" value={licenses.filter(l => l.status === 'expired' || new Date(l.expiry_date) < new Date()).length} color="#ef4444" />
                 <div className="v-divider"></div>
                 <StatusItem icon={<TrendingUp size={18} />} label="RENOVAÇÕES (30d)" value="+42" color="#3b82f6" />
                 <div className="b-search">
@@ -157,8 +157,8 @@ const LicensesList = () => {
 
             <div className="kpi-row">
                 <KPICard icon={<FileText size={26} />} label="TOTAL EMITIDO" value={licenses.length} color="#3b82f6" subText="Histórico Completo" />
-                <KPICard icon={<CheckCircle size={26} />} label="VIGENTES" value={licenses.filter(l => l.status === 'Activa').length} color="#10b981" subText="Situação Regular" />
-                <KPICard icon={<RefreshCw size={26} />} label="PENDENTES" value={licenses.filter(l => l.status === 'Pendente').length} color="#f59e0b" subText="Aguardando Validação" />
+                <KPICard icon={<CheckCircle size={26} />} label="VIGENTES" value={licenses.filter(l => l.status === 'active').length} color="#10b981" subText="Situação Regular" />
+                <KPICard icon={<RefreshCw size={26} />} label="PENDENTES" value={licenses.filter(l => l.status === 'pending').length} color="#f59e0b" subText="Aguardando Validação" />
                 <KPICard icon={<History size={26} />} label="ÚLTIMA EMISSÃO" value="Há 2h" color="#0f172a" subText="Controlo Contínuo" />
             </div>
 
@@ -177,8 +177,8 @@ const LicensesList = () => {
                         </select>
                         <select value={filters.status} onChange={(e) => setFilters({...filters, status: e.target.value})}>
                             <option value="">TODOS OS ESTADOS</option>
-                            <option value="Activa">ACTIVAS</option>
-                            <option value="Expirada">FORA DE PRAZO</option>
+                            <option value="active">ACTIVAS</option>
+                            <option value="expired">FORA DE PRAZO</option>
                         </select>
                     </div>
                 </div>
@@ -209,7 +209,7 @@ const LicensesList = () => {
                                 <motion.tbody variants={containerVariants} initial="hidden" animate="show">
                                     {filteredLicenses.map((l) => {
                                         const isExpired = new Date(l.expiry_date) < new Date();
-                                        const status = (l.status === 'Activa' && isExpired) ? 'Expirada' : l.status;
+                                        const status = (l.status === 'active' && isExpired) ? 'expired' : l.status;
                                         
                                         return (
                                             <motion.tr key={l.id} variants={itemVariants} className="tac-row" onClick={() => navigate(`/admin/licenses/${l.id}`)}>
@@ -242,7 +242,7 @@ const LicensesList = () => {
                                                     <div className="action-cluster" onClick={e => e.stopPropagation()}>
                                                         <button onClick={() => navigate(`/admin/licenses/${l.id}`)} className="tac-btn-sm"><Eye size={18} /></button>
                                                         <button onClick={() => handlePrint(l)} className="tac-btn-sm"><Printer size={18} /></button>
-                                                        {l.status === 'Activa' && (
+                                                        {l.status === 'active' && (
                                                             <button onClick={() => navigate(`/admin/licenses/renew/${l.id}`)} className="tac-btn-sm highlight" title="Renovar"><RefreshCw size={18} /></button>
                                                         )}
                                                     </div>
@@ -264,7 +264,7 @@ const LicensesList = () => {
                                     className="tac-grid-card"
                                     onClick={() => navigate(`/admin/licenses/${l.id}`)}
                                 >
-                                    <div className="g-status"><div className={`p-dot ${l.status.toLowerCase()}`}></div> {l.status.toUpperCase()}</div>
+                                    <div className="g-status"><div className={`p-dot ${l.status?.toLowerCase()}`}></div> {l.status?.toUpperCase()}</div>
                                     <div className="g-plate-section">
                                         <div className="plate-sm">
                                             <span className="l">Nº</span>
@@ -338,9 +338,9 @@ const LicensesList = () => {
 
                 .status-pill-tactical { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 100px; font-size: 0.75rem; font-weight: 950; letter-spacing: 0.5px; }
                 .status-pill-tactical .s-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-                .status-pill-tactical.activa { background: #ecfdf5; color: #10b981; }
-                .status-pill-tactical.expirada { background: #fff1f2; color: #ef4444; }
-                .status-pill-tactical.pendente { background: #fefbeb; color: #f59e0b; }
+                .status-pill-tactical.active, .status-pill-tactical.paid { background: #ecfdf5; color: #10b981; }
+                .status-pill-tactical.expired, .status-pill-tactical.cancelled { background: #fff1f2; color: #ef4444; }
+                .status-pill-tactical.pending { background: #fefbeb; color: #f59e0b; }
                 .expiry-hint { margin-top: 8px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; display: flex; align-items: center; gap: 4px; }
 
                 .action-cluster { display: flex; justify-content: flex-end; gap: 8px; }
@@ -354,8 +354,8 @@ const LicensesList = () => {
                 .tac-grid-card:hover .arrow { transform: translateX(5px); color: #0f172a; }
                 .g-status { position: absolute; top: 1.5rem; right: 2.5rem; display: flex; align-items: center; gap: 8px; font-size: 0.65rem; font-weight: 950; color: #94a3b8; }
                 .p-dot { width: 6px; height: 6px; border-radius: 50%; }
-                .p-dot.activa { background: #10b981; }
-                .p-dot.expirada { background: #ef4444; }
+                .p-dot.active { background: #10b981; }
+                .p-dot.expired { background: #ef4444; }
                 .g-plate-section { margin: 1rem 0 2.5rem 0; }
                 .plate-sm { display: inline-flex; background: #0f172a; color: white; border-radius: 8px; overflow: hidden; font-family: 'Monaco', monospace; margin-bottom: 1.5rem; border: 2px solid #334155; }
                 .plate-sm .l { background: #3b82f6; padding: 2px 8px; font-size: 0.6rem; font-weight: 950; }

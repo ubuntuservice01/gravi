@@ -63,7 +63,7 @@ const LicenseDetails = () => {
     if (!license) return <div className="p-12 text-center text-red-500 font-black">ERRO: ALVARÁ NÃO LOCALIZADO NO REPOSITÓRIO.</div>;
 
     const isExpired = new Date(license.expiry_date) < new Date();
-    const statusColor = license.status === 'Activa' ? '#10b981' : '#ef4444';
+    const statusColor = license.status === 'active' ? '#10b981' : '#ef4444';
 
     return (
         <motion.div 

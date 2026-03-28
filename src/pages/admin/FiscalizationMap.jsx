@@ -42,7 +42,7 @@ const FiscalizationMap = () => {
                 .from('motorcycles')
                 .select('status, observations')
                 .eq('municipality_id', mid)
-                .in('status', ['stolen', 'seized', 'blocked', 'apreendida']);
+                .in('status', ['stolen', 'seized', 'blocked']);
 
             const lastMonth = new Date();
             lastMonth.setDate(lastMonth.getDate() - 30);

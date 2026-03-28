@@ -30,7 +30,7 @@ const BicycleForm = () => {
         color: '',
         year: new Date().getFullYear(),
         purpose: 'Particular',
-        status: 'Activa',
+        status: 'active',
         operational_situation: 'Regular',
         observations: '',
         type: 'bicycle'

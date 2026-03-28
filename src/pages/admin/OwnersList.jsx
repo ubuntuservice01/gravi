@@ -24,7 +24,7 @@ const OwnersList = () => {
 
     const [formData, setFormData] = useState({
         full_name: '',
-        identity_document: '',
+        bi_number: '',
         nuit: '',
         phone: '',
         address: ''
@@ -80,7 +80,7 @@ const OwnersList = () => {
             fetchOwners();
             setShowModal(false);
             setEditingOwner(null);
-            setFormData({ full_name: '', identity_document: '', nuit: '', phone: '', address: '' });
+            setFormData({ full_name: '', bi_number: '', nuit: '', phone: '', address: '' });
         } catch (err) {
             alert('Erro ao guardar: ' + err.message);
         } finally {
@@ -92,7 +92,7 @@ const OwnersList = () => {
         setEditingOwner(owner);
         setFormData({
             full_name: owner.full_name,
-            identity_document: owner.identity_document,
+            bi_number: owner.bi_number,
             nuit: owner.nuit || '',
             phone: owner.phone || '',
             address: owner.address || ''
@@ -102,7 +102,7 @@ const OwnersList = () => {
 
     const filteredOwners = owners.filter(o =>
         o.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        o.identity_document?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        o.bi_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         o.phone?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -131,7 +131,7 @@ const OwnersList = () => {
                 ]}
                 actions={
                     <button 
-                        onClick={() => { setEditingOwner(null); setFormData({ full_name: '', identity_document: '', nuit: '', phone: '', address: '' }); setShowModal(true); }} 
+                        onClick={() => { setEditingOwner(null); setFormData({ full_name: '', bi_number: '', nuit: '', phone: '', address: '' }); setShowModal(true); }} 
                         className="tac-action-btn primary"
                     >
                         <Plus size={22} /> NOVO CADASTRO
@@ -221,7 +221,7 @@ const OwnersList = () => {
                                             </td>
                                             <td>
                                                 <div className="doc-cluster">
-                                                    <span className="doc-tag">BI: {o.identity_document}</span>
+                                                     <span className="doc-tag">BI: {o.bi_number}</span>
                                                     {o.nuit && <span className="doc-tag nuit">NUIT: {o.nuit}</span>}
                                                 </div>
                                             </td>
@@ -265,7 +265,7 @@ const OwnersList = () => {
                                 </div>
                                 <div className="f-group">
                                     <label>BILHETE DE IDENTIDADE</label>
-                                    <input type="text" required value={formData.identity_document} onChange={e => setFormData({...formData, identity_document: e.target.value})} />
+                                     <input type="text" required value={formData.bi_number} onChange={e => setFormData({...formData, bi_number: e.target.value})} />
                                 </div>
                                 <div className="f-group">
                                     <label>NUIT (OPCIONAL)</label>

@@ -36,8 +36,8 @@ const CarForm = () => {
         year: new Date().getFullYear(),
         cc: '',
         purpose: 'Particular',
-        status: 'Activa',
-        operational_situation: 'Pendente',
+        status: 'active',
+        operational_situation: 'pending',
         observations: '',
         type: 'car'
     });
@@ -237,7 +237,7 @@ const CarForm = () => {
                         <div>
                             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '800', color: '#475569', marginBottom: '12px' }}>Estado Operacional</label>
                             <div style={{ display: 'flex', gap: '10px' }}>
-                                {['Activa', 'Bloqueada', 'Apreendida'].map(s => (
+                                {['active', 'blocked', 'seized'].map(s => (
                                     <button
                                         key={s}
                                         type="button"
@@ -250,7 +250,7 @@ const CarForm = () => {
                                             fontWeight: '800', fontSize: '0.8rem', transition: 'all 0.2s', cursor: 'pointer'
                                         }}
                                     >
-                                        {s === 'Activa' && <CheckCircle2 size={16} style={{ marginBottom: '4px' }} />}
+                                        {s === 'active' && <CheckCircle2 size={16} style={{ marginBottom: '4px' }} />}
                                         <div style={{ textTransform: 'uppercase' }}>{s}</div>
                                     </button>
                                 ))}

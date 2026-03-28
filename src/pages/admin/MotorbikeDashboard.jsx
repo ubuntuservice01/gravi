@@ -65,9 +65,9 @@ const MotorbikeDashboard = () => {
                 .eq('type', 'motorcycle');
 
             const total = motorcycles?.length || 0;
-            const active = motorcycles?.filter(m => m.status === 'Activa' || m.status === 'active').length || 0;
-            const seized = motorcycles?.filter(m => m.status === 'Apreendida' || m.status === 'seized').length || 0;
-            const stolen = motorcycles?.filter(m => m.status === 'Roubada' || m.status === 'stolen').length || 0;
+            const active = motorcycles?.filter(m => m.status === 'active').length || 0;
+            const seized = motorcycles?.filter(m => m.status === 'seized').length || 0;
+            const stolen = motorcycles?.filter(m => m.status === 'stolen').length || 0;
 
             // 2. Revenue (Payments for motorcycles)
             const startOfMonth = new Date(filterDate.year, filterDate.month - 1, 1).toISOString();
@@ -78,7 +78,7 @@ const MotorbikeDashboard = () => {
                 .select('value, created_at, motorcycles!inner(type)')
                 .eq('municipality_id', mid)
                 .eq('motorcycles.type', 'motorcycle')
-                .eq('status', 'Confirmado')
+                .eq('status', 'confirmed')
                 .gte('created_at', startOfMonth)
                 .lte('created_at', endOfMonth);
 

@@ -53,7 +53,7 @@ const CarDetails = () => {
 
   if (!car) return <div className="p-12 text-center text-red-500 font-black">Viatura não localizada nos arquivos municipais.</div>;
 
-  const statusColor = car.status === 'Activa' ? '#10b981' : '#ef4444';
+  const statusColor = car.status === 'active' ? '#10b981' : '#ef4444';
 
   return (
     <motion.div 

@@ -45,7 +45,7 @@ const BicyclesList = () => {
     };
 
     const getStatusStyle = (status) => {
-        return status === 'Activa' 
+        return status === 'active' 
             ? { bg: '#fffbe6', color: '#d97706', icon: <CheckCircle size={14} /> }
             : { bg: '#f1f5f9', color: '#64748b', icon: <X size={14} /> };
     };

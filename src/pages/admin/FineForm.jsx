@@ -87,7 +87,7 @@ const FineForm = () => {
                 value: parseFloat(formData.value),
                 municipality_id: profile.municipality_id,
                 fiscal_id: profile.id,
-                status: 'Pendente'
+                status: 'pending'
             }]);
 
             if (error) throw error;

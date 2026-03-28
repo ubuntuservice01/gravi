@@ -35,7 +35,7 @@ const Blacklist = () => {
                 .from('motorcycles')
                 .select('*, owners(full_name, phone)')
                 .eq('municipality_id', profile.municipality_id)
-                .in('status', ['Suspensa', 'Irregular', 'Apreendida', 'Roubada', 'Bloqueada'])
+                .in('status', ['suspended', 'irregular', 'seized', 'stolen', 'blocked'])
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -58,11 +58,11 @@ const Blacklist = () => {
 
     const getStatusTheme = (status) => {
         const themes = {
-            'Suspensa': { bg: '#fee2e2', color: '#ef4444', icon: <UserX size={14} /> },
-            'Bloqueada': { bg: '#fee2e2', color: '#ef4444', icon: <ShieldAlert size={14} /> },
-            'Irregular': { bg: '#fff7ed', color: '#f59e0b', icon: <AlertOctagon size={14} /> },
-            'Apreendida': { bg: '#0f172a10', color: '#0f172a', icon: <Hash size={14} /> },
-            'Roubada': { bg: '#7f1d1d', color: '#ffffff', icon: <AlertOctagon size={14} /> }
+            'suspended': { bg: '#fee2e2', color: '#ef4444', icon: <UserX size={14} /> },
+            'blocked': { bg: '#fee2e2', color: '#ef4444', icon: <ShieldAlert size={14} /> },
+            'irregular': { bg: '#fff7ed', color: '#f59e0b', icon: <AlertOctagon size={14} /> },
+            'seized': { bg: '#0f172a10', color: '#0f172a', icon: <Hash size={14} /> },
+            'stolen': { bg: '#7f1d1d', color: '#ffffff', icon: <AlertOctagon size={14} /> }
         };
         return themes[status] || { bg: '#f1f5f9', color: '#64748b', icon: <Info size={14} /> };
     };
@@ -104,9 +104,9 @@ const Blacklist = () => {
 
             {/* Tactical Briefing Bar */}
             <div className="tactical-status-bar alert">
-                <StatusItem icon={<ShieldAlert size={18} />} label="BLOQUEIOS ACTIVOS" value={vehicles.filter(v => v.status === 'Bloqueada').length} color="#ef4444" />
+                <StatusItem icon={<ShieldAlert size={18} />} label="BLOQUEIOS ACTIVOS" value={vehicles.filter(v => v.status === 'blocked').length} color="#ef4444" />
                 <div className="v-divider"></div>
-                <StatusItem icon={<AlertOctagon size={18} />} label="VEÍCULOS ROUBADOS" value={vehicles.filter(v => v.status === 'Roubada').length} color="#7f1d1d" />
+                <StatusItem icon={<AlertOctagon size={18} />} label="VEÍCULOS ROUBADOS" value={vehicles.filter(v => v.status === 'stolen').length} color="#7f1d1d" />
                 <div className="v-divider"></div>
                 <StatusItem icon={<Activity size={18} />} label="RISCO OPERACIONAL" value="ELEVADO" color="#ef4444" />
                 <div className="b-search">
@@ -122,8 +122,8 @@ const Blacklist = () => {
 
             <div className="kpi-row">
                 <KPICard icon={<ShieldAlert size={26} />} label="RESTRIÇÕES TOTAIS" value={vehicles.length} color="#ef4444" subText="Veículos Sinalizados" />
-                <KPICard icon={<UserX size={26} />} label="SUSPENSÕES" value={vehicles.filter(v => v.status === 'Suspensa').length} color="#f59e0b" subText="Pendente Regularização" />
-                <KPICard icon={<Target size={26} />} label="APREENDIDAS" value={vehicles.filter(v => v.status === 'Apreendida').length} color="#0f172a" subText="Em Custódia Municipal" />
+                <KPICard icon={<UserX size={26} />} label="SUSPENSÕES" value={vehicles.filter(v => v.status === 'suspended').length} color="#f59e0b" subText="Pendente Regularização" />
+                <KPICard icon={<Target size={26} />} label="APREENDIDAS" value={vehicles.filter(v => v.status === 'seized').length} color="#0f172a" subText="Em Custódia Municipal" />
                 <KPICard icon={<History size={26} />} label="ACTUALIZAÇÃO" value="Tempo Real" color="#1e293b" subText={new Date().toLocaleTimeString()} />
             </div>
 
@@ -133,11 +133,11 @@ const Blacklist = () => {
                     <div className="filter-cluster">
                         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                             <option value="">TODAS AS RESTRIÇÕES</option>
-                            <option value="Suspensa">SUSPENSOS</option>
-                            <option value="Irregular">IRREGULARES</option>
-                            <option value="Apreendida">APREENDIDOS</option>
-                            <option value="Roubada">ROUBADOS</option>
-                            <option value="Bloqueada">BLOQUEADOS</option>
+                            <option value="suspended">SUSPENSOS</option>
+                            <option value="irregular">IRREGULARES</option>
+                            <option value="seized">APREENDIDOS</option>
+                            <option value="stolen">ROUBADOS</option>
+                            <option value="blocked">BLOQUEADOS</option>
                         </select>
                     </div>
                 </div>
