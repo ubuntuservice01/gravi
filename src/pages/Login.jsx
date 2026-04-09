@@ -34,7 +34,13 @@ const Login = () => {
             
             if (loginError) {
                 console.error('Erro no login (Supabase Auth):', loginError.message);
-                setError('As credenciais introduzidas são inválidas.');
+                
+                if (loginError.message?.includes('Failed to fetch') || loginError.status === 0) {
+                    setError('Falha de ligação: Não foi possível contactar o servidor.');
+                } else {
+                    setError('As credenciais introduzidas são inválidas.');
+                }
+                
                 setLoading(false);
                 return;
             }
