@@ -20,74 +20,53 @@ export const AuthProvider = ({ children }) => {
     }
     
     fetchInProgress.current = true;
-    console.log('[AUTH_LOG] 1. Início do profile fetch para UID:', uid);
     try {
+      console.log('[AUTH_LOG] 1. Perfil fetch iniciado.');
       const { data, error } = await supabase
         .from('profiles')
         .select('*, municipalities(*)')
         .eq('id', uid)
         .maybeSingle();
 
-      console.log('[AUTH_LOG] 2. Resposta da query ao Supabase:', { hasData: !!data, hasError: !!error });
+      console.log('[AUTH_LOG] 2. Supabase respondeu:', { hasData: !!data, hasError: !!error });
 
       if (error) {
-        console.error('[AUTH_LOG] ERR: Erro real retornado pelo Supabase:', error);
+        console.error('[AUTH_LOG] ERRO Supabase:', error);
         
-        if (error.message?.includes('Fetch is aborted') || error.message?.includes('AbortError')) {
-          console.warn('[AUTH_LOG] WARN: Fetch abortado (race condition). Ignorando...');
-          // Don't set error type to allow retry
+        if (error.message?.includes('Fetch is aborted')) {
+          console.warn('[AUTH_LOG] Fetch abortado (race condition).');
           fetchInProgress.current = false;
           return;
         }
         
-        if (error.message?.includes('Failed to fetch') || error.code === 'PGRST301' || error.status === 0) {
-          setErrorType('NETWORK');
-          setErrorMessage('Falha real de rede ou Supabase indisponível.');
-        } else {
-          setErrorType('FETCH_ERROR');
-          setErrorMessage('Erro ao buscar profile na base de dados.');
-          setTechnicalDetails(error.message || JSON.stringify(error));
-        }
-        
+        setErrorType('NETWORK');
+        setErrorMessage('Falha na comunicação com a base de dados.');
+        setTechnicalDetails(`Code: ${error.code} | Message: ${error.message}`);
         setProfile(null);
         fetchInProgress.current = false;
         return;
       }
 
       if (!data) {
-        console.warn('[AUTH_LOG] 3. Perfil não encontrado para o utilizador:', uid);
+        console.warn('[AUTH_LOG] 3. Perfil não encontrado no DB para UID:', uid);
         setProfile(null);
         setErrorType('NO_PROFILE');
+        fetchInProgress.current = false;
         return;
       }
 
-      console.log('[AUTH_LOG] 4. Profile encontrado. Role:', data.role);
-      console.log('[AUTH_LOG] 5. Municipality ID encontrado:', data.municipality_id);
-
-      // Validation logic
-      if (data.role !== 'super_admin' && !data.municipality_id) {
-        console.error('[AUTH_LOG] ERR: Utilizador staff sem municipality_id associado.');
-        setErrorType('NO_MUNICIPALITY');
-        setProfile(data); // We still have a profile, but it's restricted
-        return;
-      }
-
+      console.log('[AUTH_LOG] 4. Sucesso: Perfil carregado.', { role: data.role });
       setProfile(data);
-      setErrorType(null); // Clear errors if successful
-      console.log('[AUTH_LOG] 6. Decisão: Perfil validado e acesso permitido.');
+      setErrorType(null);
       
       if (data.municipality_id) {
          checkExpiredLicenses(data.municipality_id);
       }
-      fetchInProgress.current = false;
     } catch (err) {
-      console.error('[AUTH_LOG] ERR: Excepção inesperada no catch:', err);
-      if (err.message?.includes('Failed to fetch')) {
-        setErrorType('NETWORK');
-      } else {
-        setErrorType('FETCH_ERROR');
-        setTechnicalDetails(err.message || String(err));
-      }
+      console.error('[AUTH_LOG] Excepção crítica em fetchProfile:', err);
+      setErrorType('FETCH_ERROR');
+      setTechnicalDetails(err.message || String(err));
+    } finally {
       fetchInProgress.current = false;
     }
   };
@@ -101,7 +80,7 @@ export const AuthProvider = ({ children }) => {
         .eq('municipality_id', mid)
         .eq('status', 'Activa')
         .lt('expiry_date', today);
-    } catch (e) {
+    } catch {
       console.warn('[AUTH_LOG] Silent skip: checkExpiredLicenses failed (offline?).');
     }
   };
@@ -109,14 +88,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let mounted = true;
 
-    // Timeout protective mechanism: 12 seconds
+    // Timeout protective mechanism: 8 seconds
     const timeoutId = setTimeout(() => {
-      if (loading && mounted && !errorType) {
-        console.error('[AUTH_LOG] ERR: Timeout interno (12s) atingido sem resolução.');
+      if (loading && mounted) {
+        console.error('[AUTH_LOG] TIMEOUT Atingido (8s). Forçando exibição de erro.');
         setErrorType('NETWORK');
-        setErrorMessage('O sistema demorou demasiado tempo a responder (Timeout).');
+        setErrorMessage('O sistema demorou demasiado tempo a responder. Isto pode ser um erro de rede ou sincronização de base de dados.');
+        setLoading(false);
       }
-    }, 12000);
+    }, 8000);
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('[AUTH_LOG] Auth LifeCycle Event:', event);

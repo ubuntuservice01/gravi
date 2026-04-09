@@ -1,10 +1,14 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials missing. Please check your .env file.')
+  console.error('CRITICAL ERROR: Supabase credentials missing! Check Vercel Environment Variables.');
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '')
+// Ensure the client doesn't crash but logs clearly if config is broken
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder-if-missing.supabase.co', 
+  supabaseAnonKey || 'placeholder-key'
+);
